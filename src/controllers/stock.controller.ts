@@ -1,5 +1,21 @@
-import {Count, CountSchema, Filter, FilterExcludingWhere, repository, Where} from '@loopback/repository';
-import {del, get, getModelSchemaRef, param, patch, post, put, requestBody} from '@loopback/rest';
+import {
+  Count,
+  CountSchema,
+  Filter,
+  FilterExcludingWhere,
+  repository,
+  Where,
+} from '@loopback/repository';
+import {
+  del,
+  get,
+  getModelSchemaRef,
+  param,
+  patch,
+  post,
+  put,
+  requestBody,
+} from '@loopback/rest';
 import {OrderRelations, Stock} from '../models';
 import {StockRepository} from '../repositories';
 
@@ -41,9 +57,7 @@ export class StockController {
       },
     },
   })
-  async count(
-    @param.where(Stock) where?: Where<Stock>,
-  ): Promise<Count> {
+  async count(@param.where(Stock) where?: Where<Stock>): Promise<Count> {
     return this.stockRepository.count(where);
   }
 
@@ -62,9 +76,7 @@ export class StockController {
       },
     },
   })
-  async find(
-    @param.filter(Stock) filter?: Filter<Stock>,
-  ): Promise<Stock[]> {
+  async find(@param.filter(Stock) filter?: Filter<Stock>): Promise<Stock[]> {
     return this.stockRepository.find(filter);
   }
 
@@ -104,7 +116,8 @@ export class StockController {
   })
   async findById(
     @param.path.number('id') id: number,
-    @param.filter(Stock, {exclude: 'where'}) filter?: FilterExcludingWhere<Stock>
+    @param.filter(Stock, {exclude: 'where'})
+    filter?: FilterExcludingWhere<Stock>,
   ): Promise<Stock> {
     return this.stockRepository.findById(id, filter);
   }
@@ -141,7 +154,9 @@ export class StockController {
         const quantity = stockQuantity - decrementation;
         operations.push(this.stockRepository.updateById(item.id, {quantity}));
       } else {
-        return Promise.reject('Decrementation is greater then quantity in stock!');
+        return Promise.reject(
+          'Decrementation is greater then quantity in stock!',
+        );
       }
     }
 

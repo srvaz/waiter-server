@@ -9,7 +9,7 @@ const config = {
   port: 3306,
   user: 'root',
   password: 'root1234',
-  database: 'waiter_db'
+  database: 'waiter_db',
 };
 
 // Observe application's life cycle to disconnect the datasource when

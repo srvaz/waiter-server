@@ -3,9 +3,9 @@ import {Entity, model, property} from '@loopback/repository';
 @model({
   settings: {
     mysql: {
-      table: 'orders'
-    }
-  }
+      table: 'orders',
+    },
+  },
 })
 export class Order extends Entity {
   @property({
@@ -39,7 +39,6 @@ export class Order extends Entity {
     required: false,
   })
   finished: boolean;
-
 
   constructor(data?: Partial<Order>) {
     super(data);

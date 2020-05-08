@@ -27,7 +27,6 @@ export class Stock extends Entity {
   })
   quantity: number;
 
-
   constructor(data?: Partial<Stock>) {
     super(data);
   }

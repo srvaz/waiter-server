@@ -8,7 +8,6 @@ export class Test extends Entity {
   })
   propTest?: object[];
 
-
   constructor(data?: Partial<Test>) {
     super(data);
   }

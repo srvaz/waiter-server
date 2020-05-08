@@ -1,5 +1,20 @@
-import {Count, CountSchema, Filter, FilterExcludingWhere, repository, Where} from '@loopback/repository';
-import {del, get, getModelSchemaRef, param, patch, post, requestBody} from '@loopback/rest';
+import {
+  Count,
+  CountSchema,
+  Filter,
+  FilterExcludingWhere,
+  repository,
+  Where,
+} from '@loopback/repository';
+import {
+  del,
+  get,
+  getModelSchemaRef,
+  param,
+  patch,
+  post,
+  requestBody,
+} from '@loopback/rest';
 import {Order} from '../models';
 import {OrderRepository, StockRepository} from '../repositories';
 import {StockController} from './stock.controller';
@@ -11,7 +26,7 @@ export class OrderController {
     @repository(OrderRepository)
     public orderRepository: OrderRepository,
     @repository(StockRepository)
-    public stockRepository: StockRepository
+    public stockRepository: StockRepository,
   ) {
     this.stockController = new StockController(this.stockRepository);
   }
@@ -41,8 +56,8 @@ export class OrderController {
 
     this.stockController.decrementStock(items).then(
       () => this.orderRepository.create(order),
-      (err) => console.error(err),
-    )
+      err => console.error(err),
+    );
   }
 
   @get('/orders/count', {
@@ -53,9 +68,7 @@ export class OrderController {
       },
     },
   })
-  async count(
-    @param.where(Order) where?: Where<Order>,
-  ): Promise<Count> {
+  async count(@param.where(Order) where?: Where<Order>): Promise<Count> {
     return this.orderRepository.count(where);
   }
 
@@ -74,9 +87,7 @@ export class OrderController {
       },
     },
   })
-  async find(
-    @param.filter(Order) filter?: Filter<Order>,
-  ): Promise<Order[]> {
+  async find(@param.filter(Order) filter?: Filter<Order>): Promise<Order[]> {
     return this.orderRepository.find(filter);
   }
 
@@ -116,7 +127,8 @@ export class OrderController {
   })
   async findById(
     @param.path.number('id') id: number,
-    @param.filter(Order, {exclude: 'where'}) filter?: FilterExcludingWhere<Order>
+    @param.filter(Order, {exclude: 'where'})
+    filter?: FilterExcludingWhere<Order>,
   ): Promise<Order> {
     return this.orderRepository.findById(id, filter);
   }
