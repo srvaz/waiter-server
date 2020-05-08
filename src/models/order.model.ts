@@ -26,13 +26,19 @@ export class Order extends Entity {
     itemType: 'object',
     required: true,
   })
-  items: object[];
+  items: OrderRelations[];
 
   @property({
     type: 'string',
     required: true,
   })
   totalPrice: string;
+
+  @property({
+    type: 'boolean',
+    required: false,
+  })
+  finished: boolean;
 
 
   constructor(data?: Partial<Order>) {
@@ -41,7 +47,8 @@ export class Order extends Entity {
 }
 
 export interface OrderRelations {
-  // describe navigational properties here
+  id: number;
+  quantity: number;
 }
 
 export type OrderWithRelations = Order & OrderRelations;

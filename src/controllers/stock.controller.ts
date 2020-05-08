@@ -1,28 +1,12 @@
-import {
-  Count,
-  CountSchema,
-  Filter,
-  FilterExcludingWhere,
-  repository,
-  Where,
-} from '@loopback/repository';
-import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-} from '@loopback/rest';
-import {Stock} from '../models';
+import {Count, CountSchema, Filter, FilterExcludingWhere, repository, Where} from '@loopback/repository';
+import {del, get, getModelSchemaRef, param, patch, post, put, requestBody} from '@loopback/rest';
+import {OrderRelations, Stock} from '../models';
 import {StockRepository} from '../repositories';
 
 export class StockController {
   constructor(
     @repository(StockRepository)
-    public stockRepository : StockRepository,
+    public stockRepository: StockRepository,
   ) {}
 
   @post('/stock-list', {
@@ -144,6 +128,24 @@ export class StockController {
     stock: Stock,
   ): Promise<void> {
     await this.stockRepository.updateById(id, stock);
+  }
+
+  async decrementStock(items: Array<OrderRelations>): Promise<void> {
+    const operations: Promise<void>[] = [];
+
+    for (const item of items) {
+      const decrementation = item.quantity;
+      const stockQuantity = (await this.findById(item.id)).quantity;
+
+      if (stockQuantity >= decrementation) {
+        const quantity = stockQuantity - decrementation;
+        operations.push(this.stockRepository.updateById(item.id, {quantity}));
+      } else {
+        return Promise.reject('Decrementation is greater then quantity in stock!');
+      }
+    }
+
+    await Promise.all(operations);
   }
 
   @put('/stock-list/{id}', {
