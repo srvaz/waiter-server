@@ -1,5 +1,5 @@
 import {Count, CountSchema, Filter, FilterExcludingWhere, repository, Where} from '@loopback/repository';
-import {del, get, getModelSchemaRef, param, post, requestBody} from '@loopback/rest';
+import {del, get, getModelSchemaRef, param, patch, post, requestBody} from '@loopback/rest';
 import {Order} from '../models';
 import {OrderRepository, StockRepository} from '../repositories';
 import {StockController} from './stock.controller';
@@ -121,26 +121,26 @@ export class OrderController {
     return this.orderRepository.findById(id, filter);
   }
 
-  // @patch('/orders/{id}', {
-  //   responses: {
-  //     '204': {
-  //       description: 'Order PATCH success',
-  //     },
-  //   },
-  // })
-  // async updateById(
-  //   @param.path.number('id') id: number,
-  //   @requestBody({
-  //     content: {
-  //       'application/json': {
-  //         schema: getModelSchemaRef(Order, {partial: true}),
-  //       },
-  //     },
-  //   })
-  //   order: Order,
-  // ): Promise<void> {
-  //   await this.orderRepository.updateById(id, order);
-  // }
+  @patch('/orders/update-status/{id}', {
+    responses: {
+      '204': {
+        description: 'Order PATCH success',
+      },
+    },
+  })
+  async updateById(
+    @param.path.number('id') id: number,
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(Order, {partial: true}),
+        },
+      },
+    })
+    finished: boolean,
+  ): Promise<void> {
+    await this.orderRepository.updateById(id, {finished});
+  }
 
   // @put('/orders/{id}', {
   //   responses: {
