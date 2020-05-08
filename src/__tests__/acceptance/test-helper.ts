@@ -7,10 +7,14 @@ import {
 import {WaiterServerApplication} from '../..';
 
 export async function setupApplication(): Promise<AppWithClient> {
-  const restConfig = givenHttpServerConfig({
-    host: '::1',
-    port: 0,
-  });
+  const restConfig = givenHttpServerConfig();
+
+  if (restConfig.port === 0) {
+    restConfig.port = parseInt(process.env.PORT ?? '3000');
+  }
+  if (typeof restConfig.host == 'undefined') {
+    restConfig.host = process.env.HOST ?? 'localhost';
+  }
 
   const app = new WaiterServerApplication({
     rest: restConfig,
